@@ -10,6 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     --type-first: Helvetica, Arial, sans-serif;
     --type-second: 'Spectral', Georgia;
 
+    padding-top:4rem;
     color:#333;
     margin:0;
     font-family:var(--type-first);
@@ -34,6 +35,10 @@ export const GlobalStyle = createGlobalStyle`
     display:block;
     font-size:1rem;
     font-family:var(--type-first);
+  }
+
+  a{
+    text-decoration:none;
   }
 
   .container{
