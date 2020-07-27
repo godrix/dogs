@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       <Link to="/" aria-label="Dogs - Home">
         <Dogs/>
       </Link>
-      <Link to="/" className="login">Login / Cadastro</Link>
+      <Link to="/login" className="login">Login / Cadastro</Link>
     </nav>
   </Container>);
 }
