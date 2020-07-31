@@ -1,11 +1,14 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import api from '../../services/api';
 // import { Container } from './styles';
 
 interface StorageContextData {
 signed:boolean;
-sigIn:({username, password}:SigInRequest)=>Promise<void>;
+signIn:({username, password}:SigInRequest)=>Promise<void>;
 userData:UserData | null;
+signOut:()=>void;
+loading:boolean;
 }
 
 interface UserData{
@@ -22,9 +25,12 @@ const StorageContext = createContext<StorageContextData>({} as StorageContextDat
 
 const StorageProvider: React.FC = ({children}) => {
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  async function sigIn({username, password}:SigInRequest) {
+  async function signIn({username, password}:SigInRequest) {
     try {
+      setLoading(true);
       const response = await api.post('/jwt-auth/v1/token', {
         username,
         password
@@ -32,33 +38,63 @@ const StorageProvider: React.FC = ({children}) => {
   
       window.localStorage.setItem('@dogs:token', response.data.json.token);
       api.defaults.headers.common['Authorization'] = `Bearer ${response.data.json.token}`;
-
+      navigate('/count');
       getUserInfo();
     } catch (error) {
-      alert('Ocorreu um erro ao realizar o login');
+      alert('Ocorreu um erro, chegue o console.log')
+      console.log(error)
+      signOut();
+    }finally{
+      setLoading(false);
     }
   }
 
   async function getUserInfo() {
     try {
+      setLoading(true);
       const response = await api.get('/api/user');
       setUserData(response.data);
     } catch (error) {
       alert('Ocorreu um erro ao obter os dados do usuario');
+    }finally{
+      setLoading(false)
     }
   }
 
+  function signOut(){
+    setUserData(null);
+    setLoading(false);
+    window.localStorage.clear();
+    navigate('/login')
+  }
+
   useEffect(()=>{
+   async function validateLogin(){
     const token = window.localStorage.getItem('@dogs:token');
     if(token){
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      getUserInfo();
+
+      try {
+        setLoading(true);
+        await api.post('/jwt-auth/v1/token/validate');
+
+        getUserInfo();
+
+      } catch (error) {
+        signOut();
+      }finally{
+        setLoading(false)
+      }
+
     }
+   }
+
+   validateLogin();
   },[])
 
 
   return (
-  <StorageContext.Provider value={{signed: !!userData, sigIn, userData}}>
+  <StorageContext.Provider value={{signed: !!userData, signIn, signOut, userData, loading}}>
     {children}
   </StorageContext.Provider>
   );

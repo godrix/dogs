@@ -1,13 +1,17 @@
 import React from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, Navigate} from 'react-router-dom';
 
 import SigIn from '../pages/SigIn';
 import SigUp from '../pages/SigUp';
 import LostPass from '../pages/LostPass';
 import ResetPass from '../pages/ResetPass';
-// import { Container } from './styles';
+
+import {useStorage} from '../contexts/StorageContext'
 
 const Login: React.FC = () => {
+  const {signed} = useStorage();
+
+  if(signed) return <Navigate to="/count" />
   return (
     <div>
       <Routes>

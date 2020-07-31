@@ -11,13 +11,13 @@ const SigIn: React.FC = () => {
   const username = useForm({ type: false });
   const password = useForm({ type: false });
 
-  const {sigIn} = useStorage();
+  const {signIn, loading} = useStorage();
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     if (username.validate() && password.validate()) {
-        sigIn({
+      signIn({
           username: username.value, 
           password: password.value
         });
@@ -31,7 +31,7 @@ const SigIn: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <Input label="Usuario" name="user" type="text" {...username} />
         <Input label="Senha" name="password" type="text" {...password} />
-        <Button>Entrar</Button>
+        <Button loading={loading}>Entrar</Button>
       </form>
     </section>
   );
