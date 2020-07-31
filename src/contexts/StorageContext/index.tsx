@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import api from '../../services/api';
 // import { Container } from './styles';
@@ -35,7 +35,7 @@ const StorageProvider: React.FC = ({children}) => {
         username,
         password
       });
-  
+
       window.localStorage.setItem('@dogs:token', response.data.json.token);
       api.defaults.headers.common['Authorization'] = `Bearer ${response.data.json.token}`;
       navigate('/count');
@@ -49,7 +49,7 @@ const StorageProvider: React.FC = ({children}) => {
     }
   }
 
-  async function getUserInfo() {
+  const getUserInfo = useCallback(async()=>{
     try {
       setLoading(true);
       const response = await api.get('/api/user');
@@ -59,14 +59,15 @@ const StorageProvider: React.FC = ({children}) => {
     }finally{
       setLoading(false)
     }
-  }
+  },[])
 
-  function signOut(){
-    setUserData(null);
-    setLoading(false);
-    window.localStorage.clear();
-    navigate('/login')
-  }
+
+  const signOut = useCallback(()=>{
+      setUserData(null);
+      setLoading(false);
+      window.localStorage.clear();
+      navigate('/login')
+  },[navigate])
 
   useEffect(()=>{
    async function validateLogin(){
@@ -90,7 +91,7 @@ const StorageProvider: React.FC = ({children}) => {
    }
 
    validateLogin();
-  },[])
+  },[getUserInfo, signOut])
 
 
   return (
