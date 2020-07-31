@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {GlobalStyle} from './styles/global';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import {StorageProvider} from './contexts/StorageContext';
 
 import Home from './pages/Home'
 import Login from './routes/Login'
@@ -10,6 +11,7 @@ import Login from './routes/Login'
 function App() {
   return (
     <BrowserRouter>
+    <StorageProvider>
     <GlobalStyle/>
       <Header/>
         <Routes>
@@ -17,6 +19,7 @@ function App() {
           <Route path='/login/*' element={<Login/>} /> 
         </Routes>
       <Footer/>
+      </StorageProvider>
     </BrowserRouter>
   );
 }
