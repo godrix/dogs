@@ -13,6 +13,7 @@ loading:boolean;
 
 interface UserData{
   name:string;
+  userName:string;
   email:string;
 }
 
@@ -21,45 +22,52 @@ interface SigInRequest{
   password:string;
 }
 
+interface SigInResponse{
+  token: string;
+  user_email: string;
+  user_nicename: string;
+  user_display_name: string;
+  message?:string;
+}
+
 const StorageContext = createContext<StorageContextData>({} as StorageContextData)
 
 const StorageProvider: React.FC = ({children}) => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   async function signIn({username, password}:SigInRequest) {
     try {
       setLoading(true);
-      const response = await api.post('/jwt-auth/v1/token', {
+      const response = await api.post<SigInResponse>('/jwt-auth/v1/token', {
         username,
         password
       });
 
-      window.localStorage.setItem('@dogs:token', response.data.json.token);
-      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.json.token}`;
+      window.localStorage.setItem('@dogs:app', JSON.stringify(response.data));
+      setUserData({
+        name:response.data.user_display_name,
+        userName:response.data.user_nicename,
+        email:response.data.user_email,
+      });
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
       navigate('/count');
-      getUserInfo();
+
     } catch (error) {
-      alert('Ocorreu um erro, chegue o console.log')
-      console.log(error)
+
+      if(error.response.status === 403){
+       alert(error.response.data.message);
+      }else{
+        alert('Ocooreu um erro ao realizar o login');
+      }
       signOut();
     }finally{
       setLoading(false);
     }
   }
-
-  const getUserInfo = useCallback(async()=>{
-    try {
-      setLoading(true);
-      const response = await api.get('/api/user');
-      setUserData(response.data);
-    } catch (error) {
-      alert('Ocorreu um erro ao obter os dados do usuario');
-    }finally{
-      setLoading(false)
-    }
-  },[])
 
 
   const signOut = useCallback(()=>{
@@ -71,15 +79,20 @@ const StorageProvider: React.FC = ({children}) => {
 
   useEffect(()=>{
    async function validateLogin(){
-    const token = window.localStorage.getItem('@dogs:token');
-    if(token){
+    const storageData = window.localStorage.getItem('@dogs:app');
+    if(storageData){
+
+      const {token, user_nicename, user_email, user_display_name}:SigInResponse = JSON.parse(storageData)
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+      setUserData({
+        name:user_display_name,
+        userName:user_nicename,
+        email:user_email,
+      });
       try {
         setLoading(true);
-        await api.post('/jwt-auth/v1/token/validate');
-
-        getUserInfo();
+        const isValid = await api.post('/jwt-auth/v1/token/validate');
 
       } catch (error) {
         signOut();
@@ -91,7 +104,7 @@ const StorageProvider: React.FC = ({children}) => {
    }
 
    validateLogin();
-  },[getUserInfo, signOut])
+  },[signOut])
 
 
   return (

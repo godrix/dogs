@@ -1,6 +1,15 @@
-import {createGlobalStyle} from 'styled-components';
+import {createGlobalStyle, keyframes} from 'styled-components';
+
+const animeLeft = keyframes`
+to {
+  opacity:1;
+  transform:initial
+}
+`;
 
 export const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@700&display=swap');
+
   *{
     box-sizing:border-box;
 
@@ -9,6 +18,7 @@ export const GlobalStyle = createGlobalStyle`
   body{
     --type-first: Helvetica, Arial, sans-serif;
     --type-second: 'Spectral', Georgia;
+    --primary-color: #fb1;
 
     padding-top:4rem;
     color:#333;
@@ -39,6 +49,11 @@ export const GlobalStyle = createGlobalStyle`
 
   a{
     text-decoration:none;
+    color:#333;
+  }
+
+  form{
+    margin-bottom:2rem;
   }
 
   .container{
@@ -46,4 +61,62 @@ export const GlobalStyle = createGlobalStyle`
     padding:0 1rem;
     margin:0 auto;
   }
+
+  .title{
+    font-family:var(--type-second);
+    line-height:1;
+    font-size:3rem;
+    margin: 1rem 0;
+    position:relative;
+    z-index:1;
+  }
+
+  .title::after{
+    content:'';
+    display:block;
+    width:1.5rem;
+    height:1.5rem;
+    background:var(--primary-color);
+    position:absolute;
+    bottom:5px;
+    left:-5px;
+    border-radius:0.2rem;
+    z-index:-1;
+  }
+
+  .subTitle{
+    font-family: var(--type-second);
+    line-height:1;
+    font-size:2rem;
+  }
+
+  .subTitle::after{
+    content:'';
+    display:block;
+    background:#aaa;
+    height:.5rem;
+    width:3rem;
+    border-radius:0.1rem;
+  }
+
+  .title::after{
+    content:'';
+    display:block;
+    width:1.5rem;
+    height:1.5rem;
+    background:var(--primary-color);
+    position:absolute;
+    bottom:5px;
+    left:-5px;
+    border-radius:0.2rem;
+    z-index:-1;
+  }
+
+  .animeLeft{
+    opacity:0;
+    transform:translateX(-28px);
+    animation:${animeLeft} .3s forwards;
+  }
 `;
+
+
