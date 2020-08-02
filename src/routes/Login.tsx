@@ -13,14 +13,16 @@ const Login: React.FC = () => {
 
   if(signed) return <Navigate to="/count" />
   return (
-    <div>
+    <section className="login">
+      <div className="forms">
       <Routes>
         <Route path="/" element={<SigIn/>}/>
         <Route path="/create" element={<SigUp/>}/>
         <Route path="/lost-password" element={<LostPass/>}/>
         <Route path="/reset-password" element={<ResetPass/>}/>
       </Routes>
-    </div>
+      </div>
+    </section>
   );
 }
 

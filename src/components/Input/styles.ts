@@ -12,6 +12,8 @@ export const Container = styled.div`
 `;
 export const InputType = styled.input`
   border:1px solid #eee;
+  background:#eee;
+  border-radius:8px;
   display:block;
   width:100%;
   font-size:1rem;
@@ -25,7 +27,7 @@ export const InputType = styled.input`
     box-shadow:0 0 0 3px #fea, 0 0 0 4px #fb1;
   }
 
-  
+
 `;
 export const Error = styled.p`
   color:#f31;

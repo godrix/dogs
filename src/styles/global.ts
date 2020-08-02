@@ -1,5 +1,5 @@
 import {createGlobalStyle, keyframes} from 'styled-components';
-
+import backgroundImage from '../assets/login.jpg';
 const animeLeft = keyframes`
 to {
   opacity:1;
@@ -116,6 +116,39 @@ export const GlobalStyle = createGlobalStyle`
     opacity:0;
     transform:translateX(-28px);
     animation:${animeLeft} .3s forwards;
+  }
+
+  .login{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    min-height:100vh;
+    gap:2rem;
+
+    &:before{
+      display:block;
+      content:'';
+      background:url(${backgroundImage}) no-repeat center center;
+      background-size:cover;
+    }
+  }
+
+  .forms{
+    max-width:30rem;
+    padding:1rem;
+  }
+
+  @media (max-width: 40rem){
+    .login{
+      grid-template-columns:1fr;
+
+      &:before{
+        display:none;
+      }
+    }
+
+    .forms{
+      max-width:100%;
+    }
   }
 `;
 
