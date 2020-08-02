@@ -14,7 +14,7 @@ const Header: React.FC = () => {
       </Link>
       {
         userData ? (
-          <Link to="/acount" className="login">
+          <Link to="/account" className="login">
             {userData?.name}
           </Link>
         ) : (

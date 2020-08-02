@@ -54,7 +54,7 @@ const StorageProvider: React.FC = ({children}) => {
       });
       api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-      navigate('/count');
+      navigate('account/');
 
     } catch (error) {
 
