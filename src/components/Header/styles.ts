@@ -20,13 +20,13 @@ export const Container = styled.header`
     padding: 0.5rem 0;
   }
 
-  .login{
+  .login-link{
     color:#333;
     display:flex;
     align-items:center;
   }
 
-  .login::after{
+  .login-link::after{
     content:'';
     display:inline-block;
     width:14px;

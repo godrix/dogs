@@ -14,11 +14,11 @@ const Header: React.FC = () => {
       </Link>
       {
         userData ? (
-          <Link to="/account" className="login">
+          <Link to="/account" className="login-link">
             {userData?.name}
           </Link>
         ) : (
-          <Link to="/login" className="login">Login / Cadastro</Link>
+          <Link to="/login" className="login-link">Login / Cadastro</Link>
         )
       }
     </nav>
