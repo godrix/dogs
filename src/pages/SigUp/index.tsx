@@ -1,4 +1,4 @@
-import React, {useCallback, FormEvent} from 'react';
+import React, {useState, FormEvent} from 'react';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -15,11 +15,13 @@ const SigUp: React.FC = () => {
   const email = useForm({type:'email'})
   const password = useForm({type:false});
   const {signIn, loading} = useStorage();
+  const [load, setLoad] = useState(false)
 
   const handleSubmit = async(event:FormEvent)=>{
     event.preventDefault();
 
     try {
+      setLoad(true)
       const response = await api.post('/api/user', {
         username:username.value,
         email:email.value,
@@ -29,6 +31,8 @@ const SigUp: React.FC = () => {
       signIn({username:username.value, password:password.value})
     } catch (error) {
       alert('Ocorreu um erro ao criar a conta')
+    } finally{
+      setLoad(false)
     }
 
   }
@@ -39,7 +43,7 @@ const SigUp: React.FC = () => {
       <Input label="Usuário" type="text" name="username" {...username}/>
       <Input label="E-mail" type="email" name="email" {...email}/>
       <Input label="Senha" type="password" name="password" {...password}/>
-      <Button loading={loading}>Cadastrar</Button>
+      <Button loading={loading || load}>Cadastrar</Button>
     </form>
   </Container>
   );
