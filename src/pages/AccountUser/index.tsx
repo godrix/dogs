@@ -4,11 +4,13 @@ import React from 'react';
 
 import { Container } from './styles';
 import { UserHeader } from '../../components/UserHeader';
+import { UserRoutes } from '../../routes/User.routes';
 
 const AccountUser: React.FC = () => {
   return (
     <>
     <UserHeader/>
+    <UserRoutes/>
     <Container className="container">Ola usuario</Container>
     </>
   );

@@ -1,13 +1,15 @@
 import React from 'react';
 
+import UserHeaderNav from '../UserHeaderNav';
+
 import { Container } from './styles';
 
-const UserHeader: React.FC = () => {
+export const UserHeader: React.FC = () => {
   return (
     <Container>
       <h1 className="title">Titulo</h1>
+      <UserHeaderNav/>
     </Container>
   );
 }
 
-export {UserHeader};
